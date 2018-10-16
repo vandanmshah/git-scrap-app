@@ -1,37 +1,53 @@
 import React, { Component } from 'react';
-function Ul(props) {
-  const uls = props.uls;
-  const len = uls.length > 10 ? 10 : uls.length;
-  const allUls = [];
-  for (var i = 0; i < len; i++) {
-    allUls.push(<ul key = { i } > <Li index= { i } ele = { uls[i].querySelector('div') } /> </ul>)
+class Ul extends Component {
+  constructor(props) {
+    super(props);
+    this.uls = props.uls;
+    this.onUlClicked = this.onUlClicked.bind(this);
   }
-  return <div className="resultTable"> { allUls } </div>;
-}
-
-function Li(props) {
-  var splited = props.ele.querySelector("h3").innerText.split("/");
-  var ownerName = splited[0];
-  var projectName = splited[1];
-  var description = props.ele.querySelector("p").innerText;
-  var lastUpdated = props.ele.querySelector("relative-time").innerText;
-  // relative-time
-  var indexStyle = {
-    w: {
-      width: "20px",
+  onUlClicked (e) {
+    window.open(e.currentTarget.dataset.url);
+  }
+  render() {
+    const uls = this.uls;
+    const len = uls.length > 10 ? 10 : uls.length;
+    const allUls = [];
+    for (var i = 0; i < len; i++) {
+      var url = JSON.parse(this.uls[i].querySelector("h3 a").dataset.hydroClick).payload.result.url;
+      allUls.push(<ul data-url = { url } onClick =  { this.onUlClicked } key = { i } > <Li index= { i } ele = { uls[i].querySelector('div') } /> </ul>)
     }
-  };
-  // debugger
-  return (
-    <span>
-      <li style = { indexStyle.w }> { props.index + 1 } </li>
-      <li> { projectName } </li>
-      <li> { ownerName } </li>
-      <li> { description } </li>
-      <li> { lastUpdated } </li>
-    </span>
-  );
-  // return <li> { projectName } </li><li> { ownerName } </li>;
+    return (
+      <div className="resultTable"> { allUls } </div>
+    );
+  }
+}
+class Li extends Component {
+  constructor(props) {
+    super(props);
+    this.ele = props.ele;
+    this.index = props.index;
+    this.splited = props.ele.querySelector("h3").innerText.split("/");
+    this.ownerName = this.splited[0];
+    this.projectName = this.splited[1];
+    this.description = props.ele.querySelector("p").innerText;
+    this.lastUpdated = props.ele.querySelector("relative-time").innerText;
+    this.indexStyle = {
+      w: {
+        width: "20px",
+      }
+    };
+  }
+  render() {
+    return (
+      <span>
+        <li style = { this.indexStyle.w }> { this.index + 1 } </li>
+        <li> { this.projectName } </li>
+        <li> { this.ownerName } </li>
+        <li> { this.description } </li>
+        <li> { this.lastUpdated } </li>
+      </span>
+    );
+  }
 }
 function Tablecontent(ele) {
   var uls = ele.ele.querySelectorAll(".repo-list > div");
