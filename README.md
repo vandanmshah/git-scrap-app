@@ -16,5 +16,5 @@
     To run the app fire following command
     python demo.py|npm start
 # Demo
-    You can find demo link here
-    http://bit.ly/2P6DMhm
+   You can find demo link here
+   http://bit.ly/2P6DMhm
